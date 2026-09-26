@@ -29,7 +29,7 @@ public class EmailTemplateService : IEmailTemplateService
         
         var body = MergeLayout(layout, filledContent, "Confirm the registration");
         
-        return ("Confirm your registration with AirVibe", body);
+        return ("Подтвердите свою регистрацию на Комфортик", body);
     }
 
     public async Task<(string Subject, string Body)> GetLoginConfirmationTemplateAsync(
@@ -45,7 +45,7 @@ public class EmailTemplateService : IEmailTemplateService
         
         var body = MergeLayout(layout, filledContent, "Confirm your login");
         
-        return ("Confirm your account login", body);
+        return ("Подтвердите вход в аккаунт", body);
     }
 
     public async Task<(string Subject, string Body)> GetOrderConfirmedTemplateAsync(
@@ -64,7 +64,7 @@ public class EmailTemplateService : IEmailTemplateService
         
         var body = MergeLayout(layout, filledContent, $"Order #{shortId}");
         
-        return ($"Order #{shortId} confirmed", body);
+        return ($"Заказ #{shortId} подтвержден", body);
     }
 
     private async Task<string> LoadTemplateAsync(string fileName)

@@ -93,7 +93,7 @@ internal class UserService : IUserService
         await _context.SaveChangesAsync(ct);
         
         var token = await _emailTokenService.GenerateToken(newUser.Id, user.Email, ct);
-        var callbackUrl = $"http://localhost:8081/auth/confirm-email?token={Uri.EscapeDataString(token)}";
+        var callbackUrl = $"http://localhost:3000/auth/confirm-email?token={Uri.EscapeDataString(token)}";
         
         var msg = new UserRegistered()
         {

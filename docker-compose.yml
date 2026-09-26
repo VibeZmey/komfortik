@@ -1,0 +1,183 @@
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID}
+      KAFKA_PROCESS_ROLES: ${KAFKA_PROCESS_ROLES}
+      KAFKA_NODE_ID: ${KAFKA_NODE_ID}
+      KAFKA_LISTENERS: ${KAFKA_LISTENERS}
+      KAFKA_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: ${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+      KAFKA_INTER_BROKER_LISTENER_NAME: ${KAFKA_INTER_BROKER_LISTENER_NAME}
+      KAFKA_CONTROLLER_LISTENER_NAMES: ${KAFKA_CONTROLLER_LISTENER_NAMES}
+      KAFKA_CONTROLLER_QUORUM_VOTERS: ${KAFKA_CONTROLLER_QUORUM_VOTERS}
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: ${KAFKA_AUTO_CREATE_TOPICS_ENABLE}
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: ${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: ${KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR}
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: ${KAFKA_TRANSACTION_STATE_LOG_MIN_ISR}
+      KAFKA_ZOOKEEPER_CONNECT: ${KAFKA_ZOOKEEPER_CONNECT}
+    volumes:
+      - ${KAFKA_DATA_VOLUME}:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "${KAFKA_UI_EXTERNAL_PORT}:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: ${KAFKA_CLUSTERS_0_NAME}
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS}
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_EXTERNAL_PORT}:5432"
+    volumes:
+      - ${PGDATA_VOLUME}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    ports:
+      - "${REDIS_EXTERNAL_PORT}:6379"
+
+  flights:
+    build: 
+      context: ./backend       
+      dockerfile: Flights/Dockerfile
+    ports:
+      - "${FLIGHTS_PORT}:8080"
+    environment:
+      ConnectionStrings__Postgres: ${FLIGHTS_DATABASE_CONNECTION}
+      ConnectionStrings__Redis: ${FLIGHTS_REDIS_CONNECTION}
+      Encryption__Key: ${ENCRYPTION_KEY}
+      JwtOptions__PublicKeyPath: ${JWT_PUBLIC_KEY_PATH}
+      JwtOptions__TokenValidityMins: ${JWT_TOKEN_VALIDITY_MINS}
+      Kafka__BootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+    volumes:
+      - ./backend/Flights/Keys:/app/Keys:ro
+      - ./data:/app/data:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:                     
+        condition: service_healthy
+
+  mail:
+    build: 
+      context: ./backend       
+      dockerfile: Mail/Dockerfile
+    ports:
+      - "${MAIL_PORT}:8080"
+    volumes:
+      - ./backend/Flights/Keys:/app/Keys:ro
+    environment:
+      Minio__Endpoint: ${MINIO_ENDPOINT}
+      Minio__AccessKey: ${MINIO_ACCESS_KEY}
+      Minio__SecretKey: ${MINIO_SECRET_KEY}
+      Minio__BucketName: ${MINIO_BUCKET_NAME}
+      Minio__Secure: ${MINIO_SECURE}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:                     
+        condition: service_healthy
+
+  identity:
+    build: 
+      context: ./backend       
+      dockerfile: Identity/Dockerfile
+    ports:
+      - "${IDENTITY_PORT}:8080"
+    environment:
+      ConnectionStrings__Postgres: ${IDENTITY_DATABASE_CONNECTION}
+      JwtOptions__PublicKeyPath: ${JWT_PUBLIC_KEY_PATH}
+      JwtOptions__PrivateKeyPath: ${JWT_PRIVATE_KEY_PATH}
+      JwtOptions__TokenValidityMins: ${JWT_TOKEN_VALIDITY_MINS}
+      JwtOptions__RefreshTokenValidityMins: ${JWT_REFRESH_TOKEN_VALIDITY_MINS}
+      Kafka__BootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+    volumes:
+      - ./backend/Identity/Keys:/app/Keys:rw
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:                     
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_EXTERNAL_PORT}:80"
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+    depends_on:
+      - identity
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "${MINIO_EXTERNAL_API_PORT}:9000"
+      - "${MINIO_EXTERNAL_CONSOLE_PORT}:9001"
+    volumes:
+      - ${MINIO_DATA_VOLUME}:/data
+
+  boardingpasses:
+    build:
+      context: ./backend
+      dockerfile: BoardingPasses/Dockerfile
+    ports:
+      - "${BOARDING_PASSES_PORT}:8080"
+    environment:
+      Minio__Endpoint: ${MINIO_ENDPOINT}
+      Minio__AccessKey: ${MINIO_ACCESS_KEY}
+      Minio__SecretKey: ${MINIO_SECRET_KEY}
+      Minio__BucketName: ${MINIO_BUCKET_NAME}
+      Minio__Secure: ${MINIO_SECURE}
+      Kafka__BootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+    depends_on:
+      minio:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+volumes:
+  pgdata:
+    driver: local
+  kafka_data:
+    driver: local
+  minio_data:
+    driver: local

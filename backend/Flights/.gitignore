@@ -1,0 +1,46 @@
+﻿# === .NET Build Outputs ===
+**/bin/
+**/obj/
+**/publish/
+
+# === IDE Settings (Rider / Visual Studio) ===
+**/.idea/
+**/.vs/
+**/*.iml
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# === SECRETS & KEYS ===
+**/keys/
+**/certs/
+**/secrets/
+
+# файлы сертификатов и приватных ключей
+**/*.pem
+**/*.pfx
+**/*.cert
+**/*.key
+
+# Пользовательские секреты .NET
+**/secrets.json
+
+# === Docker & Environment ===
+**/.env
+**/*.env
+**/docker-compose.override.yml
+
+# === Database ===
+**/*.sqlite
+**/*.db
+
+# === OS Files ===
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+**/*~
+
+# === Logs ===
+**/logs/
+**/*.log

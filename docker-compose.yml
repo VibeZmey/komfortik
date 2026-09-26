@@ -6,6 +6,7 @@ services:
       - "9092:9092"
       - "9093:9093"
     environment:
+      
       CLUSTER_ID: ${KAFKA_CLUSTER_ID}
       KAFKA_PROCESS_ROLES: ${KAFKA_PROCESS_ROLES}
       KAFKA_NODE_ID: ${KAFKA_NODE_ID}
@@ -143,41 +144,41 @@ services:
     depends_on:
       - identity
 
-  minio:
-    image: minio/minio:latest
-    container_name: minio
-    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    ports:
-      - "${MINIO_EXTERNAL_API_PORT}:9000"
-      - "${MINIO_EXTERNAL_CONSOLE_PORT}:9001"
-    volumes:
-      - ${MINIO_DATA_VOLUME}:/data
+#  minio:
+#    image: minio/minio:latest
+#    container_name: minio
+#    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
+#    environment:
+#      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+#      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+#    ports:
+#      - "${MINIO_EXTERNAL_API_PORT}:9000"
+#      - "${MINIO_EXTERNAL_CONSOLE_PORT}:9001"
+#    volumes:
+#      - ${MINIO_DATA_VOLUME}:/data
 
-  boardingpasses:
-    build:
-      context: ./backend
-      dockerfile: BoardingPasses/Dockerfile
-    ports:
-      - "${BOARDING_PASSES_PORT}:8080"
-    environment:
-      Minio__Endpoint: ${MINIO_ENDPOINT}
-      Minio__AccessKey: ${MINIO_ACCESS_KEY}
-      Minio__SecretKey: ${MINIO_SECRET_KEY}
-      Minio__BucketName: ${MINIO_BUCKET_NAME}
-      Minio__Secure: ${MINIO_SECURE}
-      Kafka__BootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
-    depends_on:
-      minio:
-        condition: service_started
-      kafka:
-        condition: service_healthy
+#  boardingpasses:
+#    build:
+#      context: ./backend
+#      dockerfile: BoardingPasses/Dockerfile
+#    ports:
+#      - "${BOARDING_PASSES_PORT}:8080"
+#    environment:
+#      Minio__Endpoint: ${MINIO_ENDPOINT}
+#      Minio__AccessKey: ${MINIO_ACCESS_KEY}
+#      Minio__SecretKey: ${MINIO_SECRET_KEY}
+#      Minio__BucketName: ${MINIO_BUCKET_NAME}
+#      Minio__Secure: ${MINIO_SECURE}
+#      Kafka__BootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+#    depends_on:
+#      minio:
+#        condition: service_started
+#      kafka:
+#        condition: service_healthy
 volumes:
   pgdata:
     driver: local
   kafka_data:
     driver: local
-  minio_data:
-    driver: local
+#  minio_data:
+#    driver: local

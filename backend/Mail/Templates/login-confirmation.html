@@ -1,0 +1,40 @@
+﻿<div>
+  <p style="margin:0 0 24px; font-size:18px; font-weight:600; color:#111827;" class="text-main">
+    Confirm your account login 🔐
+  </p>
+
+  <p style="margin:0 0 32px; color:#4B5563;" class="text-muted">
+    Welcome, <strong style="color:#111827;" class="text-main">{{Login}}</strong>. We have recorded an attempt to log in from a new device. If it's you, click the button below.
+  </p>
+
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 32px;">
+    <tr>
+      <td align="center">
+        <table cellpadding="0" cellspacing="0" role="presentation">
+          <tr>
+            <td align="center" style="border-radius:12px; background: linear-gradient(135deg, #059669 0%, #10B981 100%);">
+              <a href="{{ConfirmationLink}}" style="display:inline-block; padding:16px 40px; font-size:16px; font-weight:600; color:#FFFFFF; text-decoration:none; border-radius:12px;">
+                Yes, it's me.
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#F0FDF4; border-radius:12px; padding:16px; margin:0 0 28px;" class="bg-soft">
+    <tr>
+      <td style="font-size:13px; color:#166534;" class="text-muted">
+        <strong>📍 Request Details:</strong><br>
+        • Time: {{CreatedAt}}<br>
+        • Account: {{Login}}<br>
+        • The link is valid for <strong>15 min</strong>
+      </td>
+    </tr>
+  </table>
+
+  <p style="margin:0; padding:16px; background-color:#FEF2F2; border-radius:12px; font-size:13px; color:#991B1B; border-left:4px solid #EF4444;" class="bg-soft">
+    ️ <strong>It, wasn't you?</strong> Don't follow the link. Urgently <a href="#" style="color:#DC2626; font-weight:600; text-decoration:underline;">change password</a> in profile settings.
+  </p>
+</div>

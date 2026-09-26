@@ -1,0 +1,422 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.tabsNav {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  border-bottom: 2px solid #c9dced;
+}
+
+.tabBtn {
+  padding: 16px 24px;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #60758a;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tabBtn:hover {
+  color: #36536c;
+}
+
+.tabBtnActive {
+  color: #2678b8;
+  font-weight: 600;
+}
+
+.tabBtnActive::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #2678b8;
+}
+
+.content {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(38, 120, 184, 0.18);
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.tabHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #19324d;
+}
+
+.searchInput {
+  padding: 10px 16px;
+  border: 1px solid #c9dced;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 300px;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2678b8;
+  box-shadow: 0 0 0 3px rgba(38, 120, 184, 0.1);
+}
+
+.loading,
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: #60758a;
+  font-size: 1rem;
+}
+
+.error {
+  padding: 16px;
+  background-color: #e6f1fb;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  color: #b4233e;
+  margin-bottom: 16px;
+}
+
+/* Orders List */
+.ordersList {
+  display: grid;
+  gap: 16px;
+}
+
+.orderCard {
+  border: 1px solid #c9dced;
+  border-radius: 12px;
+  padding: 20px;
+  background: #f5f9fd;
+  transition: all 0.2s ease;
+}
+
+.orderCard:hover {
+  border-color: #2678b8;
+  background: white;
+  box-shadow: 0 4px 12px rgba(38, 120, 184, 0.1);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.orderInfo {
+  flex: 1;
+}
+
+.orderId {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #19324d;
+  margin-bottom: 4px;
+}
+
+.userEmail {
+  font-size: 0.9rem;
+  color: #60758a;
+}
+
+.flightRoute {
+  font-size: 0.9rem;
+  color: #60758a;
+}
+
+.orderMeta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusPending {
+  background: #dceeff;
+  color: #174a7e;
+}
+
+.statusConfirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusExpired {
+  background: #dceeff;
+  color: #174a7e;
+}
+
+.statusCancelled {
+  background: #e6f1fb;
+  color: #991b1b;
+}
+
+.totalPrice {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #19324d;
+}
+
+.orderFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #c9dced;
+}
+
+.date {
+  color: #8aa0b4;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.confirmBtn,
+.cancelBtn,
+.blockBtn,
+.unblockBtn,
+.actionBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmBtn {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid #86efac;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background: #dcfce7;
+}
+
+.cancelBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+  border: 1px solid #c1dff3;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: #e6f1fb;
+}
+
+.confirmBtn:disabled,
+.cancelBtn:disabled,
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Users Table */
+.usersList {
+  overflow-x: auto;
+}
+
+.usersTable {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid #c9dced;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.usersHeader,
+.usersRow {
+  display: grid;
+  grid-template-columns: 2fr 150px 120px 150px;
+  gap: 16px;
+  padding: 16px;
+  align-items: center;
+  border-bottom: 1px solid #c9dced;
+}
+
+.usersRow:last-child {
+  border-bottom: none;
+}
+
+.usersHeader {
+  background: #f5f9fd;
+  font-weight: 600;
+  color: #60758a;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.usersRow {
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.usersRow:hover {
+  background: #f5f9fd;
+}
+
+.colEmail {
+  font-weight: 500;
+  color: #19324d;
+}
+
+.colCreatedAt,
+.colStatus,
+.colActions {
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.blocked {
+  background: #e6f1fb;
+  color: #991b1b;
+}
+
+.blockBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+  border: 1px solid #c1dff3;
+}
+
+.blockBtn:hover:not(:disabled) {
+  background: #e6f1fb;
+}
+
+.unblockBtn {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid #86efac;
+}
+
+.unblockBtn:hover:not(:disabled) {
+  background: #dcfce7;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .tabHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .searchInput {
+    width: 100%;
+  }
+
+  .usersHeader,
+  .usersRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .usersHeader {
+    display: none;
+  }
+
+  .usersRow::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #60758a;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+  }
+
+  .colEmail::before {
+    content: 'РџРѕС‡С‚Р°: ';
+  }
+
+  .colCreatedAt::before {
+    content: 'Member Since: ';
+  }
+
+  .colStatus::before {
+    content: 'Status: ';
+  }
+
+  .colActions::before {
+    content: 'Actions: ';
+  }
+
+  .orderHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .orderMeta {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .orderFooter {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .confirmBtn,
+  .cancelBtn {
+    flex: 1;
+  }
+}
+

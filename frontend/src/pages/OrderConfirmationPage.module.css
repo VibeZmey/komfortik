@@ -1,0 +1,259 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.content {
+  display: grid;
+  gap: 24px;
+}
+
+.confirmationBox {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid #c9dced;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
+  text-align: center;
+  box-shadow: 0 18px 45px rgba(101, 73, 42, 0.1);
+}
+
+.checkmark {
+  width: 4.5rem;
+  height: 4.5rem;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  color: #fff;
+  background: #6fa66b;
+  border-radius: 1.5rem;
+  margin-bottom: 16px;
+  margin: 0 auto 16px;
+}
+
+.confirmationBox h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: #19324d;
+}
+
+.confirmationBox > p {
+  margin: 0 0 32px;
+  color: #60758a;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.orderDetails {
+  background: #fafaf8;
+  border-radius: 12px;
+  border: 1px solid #dceeff;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:16px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #c9dced;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 600;
+  color: #60758a;
+  font-size: 0.95rem;
+}
+
+.value {
+  color: #19324d;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.statusPending {
+  display: inline-block;
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #1d5f99;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.bookingsList {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.bookingsList h2 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: #19324d;
+}
+
+.bookingCard {
+  background: #f2f8ff;
+  border: 1px solid #c9dced;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.bookingInfo {
+  display: grid;
+  gap: 8px;
+}
+
+.passengerName {
+  margin: 0;
+  font-weight: 600;
+  color: #19324d;
+  font-size: 1rem;
+}
+
+.seatInfo {
+  margin: 0;
+  color: #60758a;
+  font-size: 0.95rem;
+}
+
+.errorMessage {
+  background-color: #e6f1fb;
+  border: 1px solid #fca5a5;
+  color: #b4233e;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.successMessage {
+  background-color: #dcfce7;
+  border: 1px solid #86efac;
+  color: #22c55e;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cancelBtn,
+.confirmBtn,
+.backBtn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backBtn {
+  background: #f2f6fa;
+  color: #36536c;
+  border: 1px solid #c9dced;
+}
+
+.backBtn:hover {
+  background: #c9dced;
+}
+
+.cancelBtn {
+  background: #e6f1fb;
+  color: #b4233e;
+  border: 1px solid #fca5a5;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: #c1dff3;
+}
+
+.cancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirmBtn {
+  background: #16a34a;
+  color: white;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background: #15803d;
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.note {
+  margin:0;
+  color: #8aa0b4;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.loading {
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #60758a;
+}
+
+.error {
+  padding: 24px;
+  background-color: #e6f1fb;
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  color: #b4233e;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 16px;
+  }
+
+  .confirmationBox {
+    padding: 32px 20px;
+  }
+
+  .checkmark {
+    font-size: 3rem;
+  }
+
+  .confirmationBox h1 {
+    font-size: 1.5rem;
+  }
+
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .orderDetails {
+    padding: 16px;
+  }
+}

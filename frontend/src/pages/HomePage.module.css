@@ -1,0 +1,86 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.card,
+.cardAccent {
+  display: grid;
+  gap: 1rem;
+  border-radius: 28px;
+  padding: 1.4rem;
+  border: 1px solid rgba(38, 120, 184, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 48px rgba(24, 78, 125, 0.08);
+}
+
+.cardAccent {
+  background: #eef6fc;
+}
+
+.cardLabel {
+  color: #1d5f99;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.card h2,
+.cardAccent h2 {
+  margin: 0;
+  color: #19324d;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.cardAccent p {
+  margin: 0;
+  color: #60758a;
+  line-height: 1.7;
+}
+
+.list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.list div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: rgba(243, 232, 255, 0.6);
+}
+
+.list span {
+  color: #60758a;
+  font-size: 0.84rem;
+}
+
+.list strong {
+  color: #19324d;
+  font-weight: 700;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.pillRow span {
+  border-radius: 999px;
+  background: rgba(38, 120, 184, 0.12);
+  color: #174a7e;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

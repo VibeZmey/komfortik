@@ -1,0 +1,673 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+}
+
+.sidebar {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #c9dced;
+  padding: 20px;
+  height: fit-content;
+  top: 100px;
+  position: sticky;
+  box-shadow: 0 14px 34px rgba(101, 73, 42, 0.08);
+}
+
+.userCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f2f6fa;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #2678b8;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.userDetails h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #19324d;
+  word-break: break-all;
+}
+
+.tabsNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #60758a;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.tabBtn:hover {
+  background: #f2f6fa;
+  color: #2678b8;
+}
+
+.tabBtnActive {
+  background: #dceeff;
+  color: #174a7e;
+  border-left-color: #2678b8;
+}
+
+.content {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #c9dced;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: 0 14px 34px rgba(101, 73, 42, 0.07);
+}
+
+.tab h3 {
+  margin: 0 0 24px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #19324d;
+}
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.tabHeader h3 {
+  margin: 0;
+}
+
+.addBtn {
+  background: #2678b8;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.addBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38, 120, 184, 0.3);
+}
+
+.addForm {
+  background: #f5f9fd;
+  border: 1px solid #c9dced;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.addDocForm {
+  background: #ffffff;
+  border: 1px solid #c9dced;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.infoBlock {
+  background: #f5f9fd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #c9dced;
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 600;
+  color: #60758a;
+  font-size: 14px;
+}
+
+.value {
+  color: #19324d;
+  font-weight: 500;
+}
+
+.section {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #c9dced;
+}
+
+.section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #19324d;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #36536c;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #2678b8;
+  box-shadow: 0 0 0 3px rgba(38, 120, 184, 0.1);
+}
+
+.submitBtn {
+  background: #2678b8;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38, 120, 184, 0.3);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  background: #f1f7fd;
+  color: #b4233e;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #c1dff3;
+  font-size: 14px;
+}
+
+.success {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+  font-size: 14px;
+}
+
+.loading,
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: #60758a;
+  background: #f5f9fd;
+  border-radius: 12px;
+  border: 1px solid #c9dced;
+}
+
+.passengersList,
+.ordersList {
+  display: grid;
+  gap: 16px;
+}
+
+.passengerCard,
+.orderCard {
+  background: #f5f9fd;
+  border: 1px solid #c9dced;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.passengerCard:hover,
+.orderCard:hover {
+  border-color: #70a9d3;
+  box-shadow: 0 4px 12px rgba(38, 120, 184, 0.1);
+}
+
+.passengerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.passengerHeader h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #19324d;
+}
+
+.passengerHeader small {
+  display: block;
+  font-size: 12px;
+  color: #60758a;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.passengerNameBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.passengerIcon {
+  width: 32px;
+  height: 32px;
+  color: #2678b8;
+  flex-shrink: 0;
+}
+
+.noDocuments {
+  color: #2678b8;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.expandBtn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2678b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expandBtn:hover {
+  border-color: #2678b8;
+  background: #dceeff;
+}
+
+.deleteBtn {
+  background: #e6f1fb;
+  color: #b4233e;
+  border: 1px solid #c1dff3;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background: #c1dff3;
+}
+
+.documentsSection {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #c9dced;
+}
+
+.documentsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.documentsHeader h5 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #60758a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.documentsSection h5 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #60758a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.documentsList {
+  display: grid;
+  gap: 12px;
+}
+
+.documentItem {
+  background: #ffffff;
+  border: 1px solid #c9dced;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.documentItem strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2678b8;
+  margin-bottom: 4px;
+}
+
+.documentItem p {
+  margin: 0;
+  font-size: 14px;
+  color: #19324d;
+}
+
+.documentItem small {
+  display: block;
+  font-size: 12px;
+  color: #60758a;
+  margin-top: 4px;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.orderHeader h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #19324d;
+}
+
+.orderDate {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #60758a;
+}
+
+.passenger {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #19324d;
+  font-weight: 500;
+}
+
+.orderPrice {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2678b8;
+}
+
+.orderDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #c9dced;
+  font-size: 13px;
+  color: #60758a;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .tabsNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .tabBtn {
+    flex: 1;
+    min-width: 100px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .tabBtnActive {
+    border-left: none;
+    border-bottom-color: #2678b8;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .orderDetails {
+    grid-template-columns: 1fr;
+  }
+}
+
+.orderCard {
+    background: #f5f9fd;
+    border: 1px solid #c9dced;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+
+.orderCard:hover {
+    border-color: #70a9d3;
+    box-shadow: 0 4px 12px rgba(38, 120, 184, 0.1);
+}
+
+.orderMainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #c9dced;
+}
+
+.orderIdBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.orderId {
+    font-size: 14px;
+    font-weight: 700;
+    color: #19324d;
+}
+
+.orderDate {
+    font-size: 13px;
+    color: #60758a;
+}
+
+.orderStatusBadge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-bottom: 8px;
+}
+
+.orderStatusPending {
+    background: #1d5f99;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.orderStatusConfirmed {
+    background: #059669;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.orderStatusCancelled {
+    background: #f1f7fd;
+    color: #9f1d37;
+    border: 1px solid #c1dff3;
+}
+
+.orderStatusExpired {
+    background: #60758a;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+}
+
+.orderTotalPrice {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2678b8;
+    align-self: flex-start;
+}
+
+.orderToggleBtn {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2678b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+}
+
+.orderToggleBtn:hover {
+    border-color: #2678b8;
+    background: #dceeff;
+}
+
+.bookingsList {
+    display: grid;
+    gap: 12px;
+}
+
+.bookingItem {
+    background: #ffffff;
+    border: 1px solid #c9dced;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.bookingHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.bookingRoute {
+    font-size: 14px;
+    font-weight: 600;
+    color: #19324d;
+    margin: 0 0 4px 0;
+}
+
+.bookingPassenger {
+    font-size: 13px;
+    color: #60758a;
+    margin: 0;
+}
+
+.bookingSeat {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2678b8;
+}
+
+.bookingDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f2f6fa;
+    font-size: 12px;
+    color: #60758a;
+}
+
+

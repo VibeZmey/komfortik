@@ -1,0 +1,752 @@
+.container {
+  display: grid;
+  gap: 24px;
+  padding: 0;
+  align-items: start;
+}
+
+.searchPanel {
+  display: grid;
+  gap: 12px;
+  position: relative;
+  z-index: 120;
+}
+
+.searchBar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) minmax(170px, 1fr) minmax(170px, 1fr) minmax(210px, 1.15fr) auto;
+  gap: 14px;
+  align-items: end;
+  background: #ffffff;
+  border: 1px solid #c9dced;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 16px 36px rgba(101, 73, 42, 0.09);
+  position: relative;
+  z-index: 120;
+}
+
+.searchField {
+  position: relative;
+  display: grid;
+  gap: 8px;
+}
+
+.hiddenLabel {
+  display: none;
+}
+
+.airportInputsWrapper {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 0;
+}
+
+.airportInputsWrapper .searchField {
+  gap: 0;
+}
+
+.airportInputsWrapper .searchField:first-child {
+  position: relative;
+  z-index: 2;
+}
+
+.airportInputsWrapper .searchField:first-child :global(input) {
+  border-radius: 14px 0 0 14px;
+  border-right: none;
+}
+
+.airportInputsWrapper .searchField:last-child {
+  position: relative;
+  z-index: 2;
+}
+
+.airportInputsWrapper .searchField:last-child :global(input) {
+  border-radius: 0 14px 14px 0;
+  border-left: none;
+}
+
+.airportInputsWrapper .searchField :global(input):focus {
+  position: relative;
+  z-index: 3;
+}
+
+.swapCitiesButton {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #c9dced;
+  background: #fff;
+  color: #2678b8;
+  border-radius: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+  align-self: center;
+}
+
+.swapCitiesButton:hover {
+  background: #f2f8ff;
+  border-color: #9fc9e9;
+}
+
+.swapCitiesButton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.searchField label,
+.sidebar label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #60758a;
+}
+
+.searchField input,
+.searchField select,
+.sidebar input,
+.sidebar select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #c9dced;
+  background: #fff;
+  color: #19324d;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dateField {
+  position: relative;
+  min-width: 0;
+}
+
+.dateButton {
+  width: 100%;
+  padding: 12px 44px 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #c9dced;
+  background: #fff;
+  color: #19324d;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dateActionIcon,
+.dateActionClear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateActionIcon {
+  color: #2678b8;
+  pointer-events: none;
+}
+
+.dateActionIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dateActionClear {
+  border: none;
+  background: #f2f8ff;
+  border-radius: 999px;
+  color: #1d5f99;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dateButton:hover {
+  border-color: #9fc9e9;
+}
+
+.calendarPopover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 320;
+  width: min(620px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #dceeff;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(17, 24, 39, 0.12);
+  padding: 12px;
+}
+
+.calendarPopover button {
+  min-width: 0;
+}
+
+.calendarHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #60758a;
+  margin-bottom: 10px;
+}
+
+.calendarTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #60758a;
+}
+
+.calendarNav {
+  display: inline-flex;
+  gap: 0;
+}
+
+.calendarArrowButton {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #c9dced;
+  background: #f2f8ff;
+  color: #1d5f99;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.calendarArrowButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.calendarNextButton {
+  border: 1px solid #c9dced;
+  background: #f2f8ff;
+  color: #1d5f99;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calendarNextButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.calendarMonths {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.monthCard {
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 8px;
+  background: #fcfcff;
+}
+
+.monthTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.weekdayRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.weekdayRow span {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.dayCell {
+  border: none;
+  border-radius: 10px;
+  height: 34px;
+  background: #ffffff;
+  color: #19324d;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dayCell:hover:not(:disabled) {
+  background: #f2f8ff;
+}
+
+.dayCell:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.dayMuted {
+  color: #94a3b8;
+}
+
+.daySelected {
+  background: #2678b8;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.searchField input:focus,
+.searchField select:focus,
+.sidebar input:focus,
+.sidebar select:focus {
+  outline: none;
+  border-color: #70a9d3;
+  box-shadow: 0 0 0 4px rgba(112, 169, 211, 0.12);
+}
+
+.passengerButton {
+  width: 100%;
+  border: 1px solid #c9dced;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #eef6fc;
+  color: #19324d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.passengerButton:hover {
+  border-color: #9fc9e9;
+}
+
+.passengerButton span {
+  font-weight: 600;
+}
+
+.passengerButton small {
+  color: #2678b8;
+  font-weight: 700;
+}
+
+.passengerPanel {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  z-index: 40;
+  width: 100%;
+  min-width: 280px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #dceeff;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(24, 78, 125, 0.14);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.passengerRow {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  align-items: center;
+  gap: 12px;
+}
+
+.passengerRow span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #36536c;
+}
+
+.passengerRow input,
+.passengerRow select {
+  width: 100%;
+}
+
+.passengerControl {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  gap: 8px;
+  align-items: center;
+}
+
+.passengerControl button {
+  border: 1px solid #c9dced;
+  border-radius: 10px;
+  background: #f2f8ff;
+  color: #1d5f99;
+  height: 32px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.passengerControl input {
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.passengerControl input::-webkit-outer-spin-button,
+.passengerControl input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.searchButton {
+  align-self: end;
+  white-space: nowrap;
+  min-height: 48px;
+}
+
+.bodyGrid {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  position: relative;
+  z-index: 20;
+}
+
+.sidebar {
+  position: sticky;
+  top: 24px;
+  background: #ffffff;
+  border: 1px solid #c9dced;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 14px 30px rgba(101, 73, 42, 0.08);
+  z-index: 10;
+}
+
+.section {
+  display: grid;
+  gap: 10px;
+}
+
+.section h3 {
+  margin: 0 0 2px;
+  font-size: 14px;
+  color: #174a7e;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.inlineGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.inlineGrid > div {
+  display: grid;
+  gap: 8px;
+}
+
+.timeSlotWrap {
+  grid-column: 1 / -1;
+}
+
+.timeSlots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.timeSlotBtn {
+  border: 1px solid #c9dced;
+  background: #ffffff;
+  color: #174a7e;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.timeSlotBtnActive {
+  background: #dceeff;
+  border-color: #70a9d3;
+}
+
+.results {
+  min-height: 420px;
+}
+
+.hint {
+  padding: 36px;
+  color: #60758a;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed #c9dced;
+  border-radius: 24px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 24px;
+  border: 1px solid #c9dced;
+  box-shadow: 0 12px 28px rgba(101, 73, 42, 0.07);
+  display: grid;
+  gap: 14px;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.badge {
+  background: #059669;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.priceLabel {
+  font-size: 12px;
+  color: #60758a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.priceValue {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  color: #174a7e;
+}
+
+.routeRow {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(120px, 0.8fr) minmax(140px, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.tripSection {
+  display: grid;
+  gap: 10px;
+}
+
+.tripLabel {
+  font-size: 12px;
+  color: #60758a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tripDivider {
+  width: 100%;
+  border-top: 1px dashed #c9dced;
+}
+
+.pointBlock {
+  display: grid;
+  gap: 4px;
+}
+
+.pointBlockEnd {
+  text-align: right;
+}
+
+.timeValue {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  color: #19324d;
+}
+
+.cityValue {
+  font-size: 15px;
+  font-weight: 700;
+  color: #19324d;
+}
+
+.airportCode {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d5f99;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+
+.dateValue {
+  font-size: 12px;
+  color: #60758a;
+}
+
+.durationBlock {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.durationCodes {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.durationValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #174a7e;
+}
+
+.durationLine {
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: #d8c7a8;
+}
+
+.airlineName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #174a7e;
+}
+
+.loadMoreWrap {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  color: #9f1d37;
+  background: #f1f7fd;
+  border: 1px solid #c1dff3;
+  padding: 10px 12px;
+  border-radius: 14px;
+}
+
+@media (max-width: 1200px) {
+  .searchBar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .airportInputsWrapper {
+    grid-column: 1 / -1;
+  }
+
+  .searchButton {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1100px) {
+  .bodyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding: 16px;
+  }
+
+  .searchBar {
+    grid-template-columns: 1fr;
+  }
+
+  .airportInputsWrapper {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .calendarPopover {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    left: 50%;
+  }
+
+  .calendarMonths {
+    grid-template-columns: 1fr;
+  }
+
+  .passengerRow,
+  .inlineGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeSlots {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cardTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .routeRow {
+    grid-template-columns: 1fr;
+    justify-items: flex-start;
+  }
+
+  .pointBlockEnd {
+    text-align: left;
+  }
+
+  .durationBlock {
+    justify-items: flex-start;
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
+

@@ -24,7 +24,9 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(async () => {
       try {
-        const res = await apiClient.get(`/airports/cities?q=${encodeURIComponent(query)}&take=${take}`);
+        const res = await apiClient.get(
+          `/airports/cities?q=${encodeURIComponent(query)}&take=${take}`,
+        );
         setSuggestions(res.data || []);
         setOpen(true);
       } catch (err) {
@@ -48,7 +50,8 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
     }
 
     document.addEventListener('pointerdown', handleOutsidePointerDown);
-    return () => document.removeEventListener('pointerdown', handleOutsidePointerDown);
+    return () =>
+      document.removeEventListener('pointerdown', handleOutsidePointerDown);
   }, []);
 
   function handleSelect(item) {
@@ -58,7 +61,9 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
   }
 
   function commitIfPossible() {
-    const exact = suggestions.find((item) => item.toLowerCase() === query.trim().toLowerCase());
+    const exact = suggestions.find(
+      (item) => item.toLowerCase() === query.trim().toLowerCase(),
+    );
     if (exact) {
       handleSelect(exact);
       return;
@@ -80,6 +85,7 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
         className={styles.input}
         value={query}
         placeholder={placeholder}
+        aria-label={placeholder}
         onChange={(e) => {
           setQuery(e.target.value);
           onChange(e.target.value);
@@ -104,7 +110,12 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
       {open && suggestions.length > 0 ? (
         <ul className={styles.list} role="listbox">
           {suggestions.map((s) => (
-            <li key={s} role="option" onMouseDown={() => handleSelect(s)} className={styles.item}>
+            <li
+              key={s}
+              role="option"
+              onMouseDown={() => handleSelect(s)}
+              className={styles.item}
+            >
               {s}
             </li>
           ))}
@@ -113,8 +124,3 @@ export function AirportAutosuggest({ value, onChange, placeholder }) {
     </div>
   );
 }
-
-
-
-
-

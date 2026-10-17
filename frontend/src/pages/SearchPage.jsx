@@ -1,4 +1,6 @@
-﻿import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Select } from '../components/ui/Select';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
 import { AirportAutosuggest } from '../components/ui/AirportAutosuggest';
@@ -97,7 +99,9 @@ function formatAirportDateTime(dateValue, timezoneOffset) {
   }
 
   const offsetHours = normalizeTimezoneOffset(timezoneOffset);
-  const shifted = new Date(new Date(dateValue).getTime() + offsetHours * 60 * 60 * 1000);
+  const shifted = new Date(
+    new Date(dateValue).getTime() + offsetHours * 60 * 60 * 1000,
+  );
 
   const time = new Intl.DateTimeFormat('ru-RU', {
     timeZone: 'UTC',
@@ -178,13 +182,39 @@ function getBadgeLabel(index, sortBy, sortDirection) {
 }
 
 function renderSegmentCard(segment, label) {
-  const fromCity = getSegmentValue(segment?.fromAirport || segment?.FromAirport, 'city', 'City') || '-';
-  const toCity = getSegmentValue(segment?.toAirport || segment?.ToAirport, 'city', 'City') || '-';
-  const fromCode = getSegmentValue(segment?.fromAirport || segment?.FromAirport, 'code', 'Code') || '---';
-  const toCode = getSegmentValue(segment?.toAirport || segment?.ToAirport, 'code', 'Code') || '---';
-  const fromTimezoneOffset = getSegmentValue(segment?.fromAirport || segment?.FromAirport, 'timezoneOffset', 'TimezoneOffset');
-  const toTimezoneOffset = getSegmentValue(segment?.toAirport || segment?.ToAirport, 'timezoneOffset', 'TimezoneOffset');
-  const departureTime = getSegmentValue(segment, 'departureTime', 'DepartureTime');
+  const fromCity =
+    getSegmentValue(
+      segment?.fromAirport || segment?.FromAirport,
+      'city',
+      'City',
+    ) || '-';
+  const toCity =
+    getSegmentValue(segment?.toAirport || segment?.ToAirport, 'city', 'City') ||
+    '-';
+  const fromCode =
+    getSegmentValue(
+      segment?.fromAirport || segment?.FromAirport,
+      'code',
+      'Code',
+    ) || '---';
+  const toCode =
+    getSegmentValue(segment?.toAirport || segment?.ToAirport, 'code', 'Code') ||
+    '---';
+  const fromTimezoneOffset = getSegmentValue(
+    segment?.fromAirport || segment?.FromAirport,
+    'timezoneOffset',
+    'TimezoneOffset',
+  );
+  const toTimezoneOffset = getSegmentValue(
+    segment?.toAirport || segment?.ToAirport,
+    'timezoneOffset',
+    'TimezoneOffset',
+  );
+  const departureTime = getSegmentValue(
+    segment,
+    'departureTime',
+    'DepartureTime',
+  );
   const arrivalTime = getSegmentValue(segment, 'arrivalTime', 'ArrivalTime');
   const durationMins = getSegmentValue(segment, 'durationMins', 'DurationMins');
 
@@ -193,13 +223,19 @@ function renderSegmentCard(segment, label) {
       <div className={styles.tripLabel}>{label}</div>
       <div className={styles.routeRow}>
         <div className={styles.pointBlock}>
-          <div className={styles.timeValue}>{formatTimeLabel(departureTime, fromTimezoneOffset)}</div>
+          <div className={styles.timeValue}>
+            {formatTimeLabel(departureTime, fromTimezoneOffset)}
+          </div>
           <div className={styles.cityValue}>{fromCity}</div>
-          <div className={styles.dateValue}>{formatDateLabel(departureTime, fromTimezoneOffset)}</div>
+          <div className={styles.dateValue}>
+            {formatDateLabel(departureTime, fromTimezoneOffset)}
+          </div>
         </div>
 
         <div className={styles.durationBlock}>
-          <div className={styles.durationValue}>{formatDuration(durationMins)}</div>
+          <div className={styles.durationValue}>
+            {formatDuration(durationMins)}
+          </div>
           <div className={styles.durationCodes}>
             <span className={styles.airportCode}>{fromCode}</span>
             <span className={styles.airportCode}>{toCode}</span>
@@ -208,9 +244,13 @@ function renderSegmentCard(segment, label) {
         </div>
 
         <div className={`${styles.pointBlock} ${styles.pointBlockEnd}`}>
-          <div className={styles.timeValue}>{formatTimeLabel(arrivalTime, toTimezoneOffset)}</div>
+          <div className={styles.timeValue}>
+            {formatTimeLabel(arrivalTime, toTimezoneOffset)}
+          </div>
           <div className={styles.cityValue}>{toCity}</div>
-          <div className={styles.dateValue}>{formatDateLabel(arrivalTime, toTimezoneOffset)}</div>
+          <div className={styles.dateValue}>
+            {formatDateLabel(arrivalTime, toTimezoneOffset)}
+          </div>
         </div>
       </div>
     </div>
@@ -222,19 +262,43 @@ export function SearchPage() {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken));
   const [origin, setOrigin] = useState(() => searchParams.get('from') || '');
-  const [destination, setDestination] = useState(() => searchParams.get('to') || '');
-  const [departureDate, setDepartureDate] = useState(() => searchParams.get('departure') || '');
-  const [returnDate, setReturnDate] = useState(() => searchParams.get('return') || '');
-  const [adults, setAdults] = useState(() => parseIntParam(searchParams.get('adults'), 1));
-  const [kids, setKids] = useState(() => parseIntParam(searchParams.get('kids'), 0));
-  const [babies, setBabies] = useState(() => parseIntParam(searchParams.get('babies'), 0));
-  const [cabinClass, setCabinClass] = useState(() => searchParams.get('class') || 'Economy');
+  const [destination, setDestination] = useState(
+    () => searchParams.get('to') || '',
+  );
+  const [departureDate, setDepartureDate] = useState(
+    () => searchParams.get('departure') || '',
+  );
+  const [returnDate, setReturnDate] = useState(
+    () => searchParams.get('return') || '',
+  );
+  const [adults, setAdults] = useState(() =>
+    parseIntParam(searchParams.get('adults'), 1),
+  );
+  const [kids, setKids] = useState(() =>
+    parseIntParam(searchParams.get('kids'), 0),
+  );
+  const [babies, setBabies] = useState(() =>
+    parseIntParam(searchParams.get('babies'), 0),
+  );
+  const [cabinClass, setCabinClass] = useState(
+    () => searchParams.get('class') || 'Economy',
+  );
   const [showPassengerPanel, setShowPassengerPanel] = useState(false);
-  const [maxTotalPrice, setMaxTotalPrice] = useState(() => searchParams.get('maxPrice') || '');
-  const [departureTimeSlot, setDepartureTimeSlot] = useState(() => searchParams.get('slot') || 'any');
-  const [airlineId, setAirlineId] = useState(() => searchParams.get('airlineId') || '');
-  const [sortBy, setSortBy] = useState(() => searchParams.get('sortBy') || 'Price');
-  const [sortDirection, setSortDirection] = useState(() => searchParams.get('direction') || 'Ascending');
+  const [maxTotalPrice, setMaxTotalPrice] = useState(
+    () => searchParams.get('maxPrice') || '',
+  );
+  const [departureTimeSlot, setDepartureTimeSlot] = useState(
+    () => searchParams.get('slot') || 'any',
+  );
+  const [airlineId, setAirlineId] = useState(
+    () => searchParams.get('airlineId') || '',
+  );
+  const [sortBy, setSortBy] = useState(
+    () => searchParams.get('sortBy') || 'Price',
+  );
+  const [sortDirection, setSortDirection] = useState(
+    () => searchParams.get('direction') || 'Ascending',
+  );
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [results, setResults] = useState(null);
@@ -247,6 +311,7 @@ export function SearchPage() {
   const passengerPanelRef = useRef(null);
   const departureCalendarRef = useRef(null);
   const returnCalendarRef = useRef(null);
+  const calendarMenuRef = useRef(null);
   const inactivityTimerRef = useRef(null);
   const [openCalendarField, setOpenCalendarField] = useState(null);
   const [calendarOffset, setCalendarOffset] = useState(0);
@@ -264,7 +329,7 @@ export function SearchPage() {
       { value: 'ArrivalTime', label: 'Время прибытия' },
       { value: 'Duration', label: 'Длительность' },
     ],
-    []
+    [],
   );
 
   useEffect(() => {
@@ -284,16 +349,42 @@ export function SearchPage() {
 
   useEffect(() => {
     function handleOutsideCalendarClick(event) {
-      const insideDeparture = departureCalendarRef.current && departureCalendarRef.current.contains(event.target);
-      const insideReturn = returnCalendarRef.current && returnCalendarRef.current.contains(event.target);
-      if (!insideDeparture && !insideReturn) {
+      const insideDeparture =
+        departureCalendarRef.current &&
+        departureCalendarRef.current.contains(event.target);
+      const insideReturn =
+        returnCalendarRef.current &&
+        returnCalendarRef.current.contains(event.target);
+      if (
+        !insideDeparture &&
+        !insideReturn &&
+        !calendarMenuRef.current?.contains(event.target)
+      ) {
         setOpenCalendarField(null);
       }
     }
 
     document.addEventListener('pointerdown', handleOutsideCalendarClick);
-    return () => document.removeEventListener('pointerdown', handleOutsideCalendarClick);
+    return () =>
+      document.removeEventListener('pointerdown', handleOutsideCalendarClick);
   }, []);
+
+  useEffect(() => {
+    if (!openCalendarField) return;
+    function closeOnEscape(event) {
+      if (event.key === 'Escape') {
+        setOpenCalendarField(null);
+        (openCalendarField === 'departure'
+          ? departureCalendarRef
+          : returnCalendarRef
+        ).current
+          ?.querySelector('button')
+          ?.focus();
+      }
+    }
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [openCalendarField]);
 
   // Inactivity timer for stale data warning
   useEffect(() => {
@@ -306,9 +397,12 @@ export function SearchPage() {
       if (inactivityTimerRef.current) {
         clearTimeout(inactivityTimerRef.current);
       }
-      inactivityTimerRef.current = setTimeout(() => {
-        setShowStaleDataWarning(true);
-      }, 2 * 60 * 1000); // 2 minutes
+      inactivityTimerRef.current = setTimeout(
+        () => {
+          setShowStaleDataWarning(true);
+        },
+        2 * 60 * 1000,
+      ); // 2 minutes
     }
 
     // Start timer when results are loaded
@@ -420,7 +514,14 @@ export function SearchPage() {
   async function fetchFlights(nextPageNumber, append) {
     const params = buildSearchParams(nextPageNumber);
     const response = await apiClient.get('/flights', { params });
-    const nextResults = Array.isArray(response.data) ? response.data : [];
+    const received = Array.isArray(response.data) ? response.data : [];
+    const nextResults = params.ReturnDate
+      ? received.filter((flight) => flight.return || flight.Return)
+      : received;
+    if (params.ReturnDate && received.length && !nextResults.length)
+      setError(
+        'На выбранную дату нет обратного рейса. Выберите другую дату возвращения.',
+      );
 
     setResults((prev) => {
       if (!append) {
@@ -473,87 +574,97 @@ export function SearchPage() {
     }
   }
 
-   async function handleFlightClick(result) {
-     const isAuthenticated = useAuthStore.getState().accessToken;
+  async function handleFlightClick(result) {
+    const isAuthenticated = useAuthStore.getState().accessToken;
 
-     if (!isAuthenticated) {
-       setError('Войдите или зарегистрируйтесь, чтобы забронировать рейс');
-       // Redirect to auth page after a delay
-       setTimeout(() => {
-         navigate('/auth');
-       }, 2000);
-       return;
-     }
+    if (!isAuthenticated) {
+      setError('Войдите или зарегистрируйтесь, чтобы забронировать рейс');
+      // Redirect to auth page after a delay
+      setTimeout(() => {
+        navigate('/auth');
+      }, 2000);
+      return;
+    }
 
-     const outboundFlight = result.outbound || result.Outbound;
-     const returnFlight = result.return || result.Return;
-     
-     if (!outboundFlight) {
-       setError('Выбран недействительный рейс. Попробуйте снова.');
-       return;
-     }
+    const outboundFlight = result.outbound || result.Outbound;
+    const returnFlight = result.return || result.Return;
 
-     const flightId = outboundFlight.id || outboundFlight.Id;
-     setBookingLoading(true);
-     setError('');
+    if (!outboundFlight) {
+      setError('Выбран недействительный рейс. Попробуйте снова.');
+      return;
+    }
 
-     try {
-       const response = await apiClient.get(`/flights/${flightId}`);
-       const fullFlight = response.data;
+    const flightId = outboundFlight.id || outboundFlight.Id;
+    setBookingLoading(true);
+    setError('');
 
-       const status = fullFlight.status;
-       const FLIGHT_STATUS = {
-         Scheduled: 0,
-         CheckIn: 1,
-         Boarding: 2,
-         Departed: 3,
-         Arrived: 4,
-         Cancelled: 5,
-         Delayed: 6,
-       };
+    try {
+      const response = await apiClient.get(`/flights/${flightId}`);
+      const fullFlight = response.data;
 
-       if (status !== FLIGHT_STATUS.Scheduled && status !== FLIGHT_STATUS.CheckIn) {
-         setError('Этот рейс больше недоступен для бронирования.');
-         return;
-       }
+      const status = fullFlight.status;
+      const FLIGHT_STATUS = {
+        Scheduled: 0,
+        CheckIn: 1,
+        Boarding: 2,
+        Departed: 3,
+        Arrived: 4,
+        Cancelled: 5,
+        Delayed: 6,
+      };
 
-       // If there's a return flight, fetch it as well
-       let returnFlightData = null;
-       if (returnFlight) {
-         const returnFlightId = returnFlight.id || returnFlight.Id;
-         try {
-           const returnResponse = await apiClient.get(`/flights/${returnFlightId}`);
-           returnFlightData = returnResponse.data;
-           
-           if (returnFlightData.status !== FLIGHT_STATUS.Scheduled && returnFlightData.status !== FLIGHT_STATUS.CheckIn) {
-             setError('Обратный рейс больше недоступен для бронирования.');
-             return;
-           }
-         } catch (err) {
-           setError('Не удалось загрузить данные обратного рейса. Попробуйте снова.');
-           return;
-         }
-       }
+      if (
+        status !== FLIGHT_STATUS.Scheduled &&
+        status !== FLIGHT_STATUS.CheckIn
+      ) {
+        setError('Этот рейс больше недоступен для бронирования.');
+        return;
+      }
 
-       // Navigate to booking page with flight data (both outbound and return if available)
-       navigate(`/booking/${flightId}`, {
-         state: {
-           flight: fullFlight,
-           returnFlight: returnFlightData,
-           passengers: {
-             adults,
-             kids,
-             babies,
-           },
-         },
-       });
-     } catch (err) {
-       setError('Не удалось загрузить данные рейса. Попробуйте снова.');
-       console.error(err);
-     } finally {
-       setBookingLoading(false);
-     }
-   }
+      // If there's a return flight, fetch it as well
+      let returnFlightData = null;
+      if (returnFlight) {
+        const returnFlightId = returnFlight.id || returnFlight.Id;
+        try {
+          const returnResponse = await apiClient.get(
+            `/flights/${returnFlightId}`,
+          );
+          returnFlightData = returnResponse.data;
+
+          if (
+            returnFlightData.status !== FLIGHT_STATUS.Scheduled &&
+            returnFlightData.status !== FLIGHT_STATUS.CheckIn
+          ) {
+            setError('Обратный рейс больше недоступен для бронирования.');
+            return;
+          }
+        } catch (err) {
+          setError(
+            'Не удалось загрузить данные обратного рейса. Попробуйте снова.',
+          );
+          return;
+        }
+      }
+
+      // Navigate to booking page with flight data (both outbound and return if available)
+      navigate(`/booking/${flightId}`, {
+        state: {
+          flight: fullFlight,
+          returnFlight: returnFlightData,
+          passengers: {
+            adults,
+            kids,
+            babies,
+          },
+        },
+      });
+    } catch (err) {
+      setError('Не удалось загрузить данные рейса. Попробуйте снова.');
+      console.error(err);
+    } finally {
+      setBookingLoading(false);
+    }
+  }
 
   function updatePassengerValue(type, value) {
     const next = Number.isFinite(value) ? value : 0;
@@ -572,7 +683,19 @@ export function SearchPage() {
 
   function openCalendar(field) {
     setOpenCalendarField((prev) => (prev === field ? null : field));
-    setCalendarOffset(0);
+    const selected = parseDateOnly(
+      field === 'return' ? returnDate || departureDate : departureDate,
+    );
+    setCalendarOffset(
+      selected
+        ? Math.max(
+            0,
+            (selected.getFullYear() - today.getFullYear()) * 12 +
+              selected.getMonth() -
+              today.getMonth(),
+          )
+        : 0,
+    );
   }
 
   function selectDate(field, date) {
@@ -591,13 +714,22 @@ export function SearchPage() {
   function renderCalendar(field) {
     const selectedValue = field === 'departure' ? departureDate : returnDate;
     const selectedDate = parseDateOnly(selectedValue);
-    const minDate = field === 'return' && departureDate ? parseDateOnly(departureDate) || today : today;
+    const minDate =
+      field === 'return' && departureDate
+        ? parseDateOnly(departureDate) || today
+        : today;
     const monthBase = addMonths(startOfMonth(today), calendarOffset);
     const months = [monthBase, addMonths(monthBase, 1)];
-    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
     return (
-      <div className={styles.calendarPopover}>
+      <div
+        ref={calendarMenuRef}
+        role="dialog"
+        aria-label={field === 'departure' ? 'Дата вылета' : 'Дата возвращения'}
+        className={styles.calendarPopover}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         <div className={styles.calendarHead}>
           <button
             type="button"
@@ -608,7 +740,9 @@ export function SearchPage() {
           >
             {'<'}
           </button>
-          <span className={styles.calendarTitle}>Choose {field === 'departure' ? 'departure' : 'return'} date</span>
+          <span className={styles.calendarTitle}>
+            {field === 'departure' ? 'Дата вылета' : 'Дата возвращения'}
+          </span>
           <div className={styles.calendarNav}>
             <button
               type="button"
@@ -625,9 +759,15 @@ export function SearchPage() {
           {months.map((monthDate) => {
             const grid = getMonthGrid(monthDate);
             return (
-              <div key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`} className={styles.monthCard}>
+              <div
+                key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}
+                className={styles.monthCard}
+              >
                 <div className={styles.monthTitle}>
-                  {new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(monthDate)}
+                  {new Intl.DateTimeFormat('ru-RU', {
+                    month: 'long',
+                    year: 'numeric',
+                  }).format(monthDate)}
                 </div>
                 <div className={styles.weekdayRow}>
                   {weekdays.map((day) => (
@@ -638,13 +778,21 @@ export function SearchPage() {
                   {grid.map((day) => {
                     const dayString = toDateOnlyString(day);
                     const isPast = day < minDate;
-                    const isCurrentMonth = day.getMonth() === monthDate.getMonth();
-                    const isSelected = selectedDate && toDateOnlyString(selectedDate) === dayString;
+                    const isCurrentMonth =
+                      day.getMonth() === monthDate.getMonth();
+                    const isSelected =
+                      selectedDate &&
+                      toDateOnlyString(selectedDate) === dayString;
                     return (
                       <button
                         key={dayString}
                         type="button"
                         className={`${styles.dayCell} ${!isCurrentMonth ? styles.dayMuted : ''} ${isSelected ? styles.daySelected : ''}`}
+                        aria-label={day.toLocaleDateString('ru-RU', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}
                         disabled={isPast}
                         onClick={() => selectDate(field, day)}
                       >
@@ -662,14 +810,34 @@ export function SearchPage() {
   }
 
   return (
-    <AppShell title="Поиск рейсов" subtitle="Сравнивайте цены, фильтры и расписание в одном месте.">
+    <AppShell
+      title="Поиск рейсов"
+      subtitle="Ваш следующий маршрут. Всё остальное мы поможем организовать."
+    >
       <div className={styles.container}>
         <section className={styles.searchPanel}>
+          <div className={styles.searchIntro}>
+            <div>
+              <h2>Куда отправимся?</h2>
+              <p>
+                Выберите направление и день, который станет началом путешествия.
+              </p>
+            </div>
+            <div className={styles.routeArt} aria-hidden="true">
+              <span>↗</span>
+              <i />
+              <b>READY TO GO</b>
+            </div>
+          </div>
           <form className={styles.searchBar} onSubmit={handleSearch}>
             <div className={styles.airportInputsWrapper}>
               <div className={styles.searchField}>
                 <label className={styles.hiddenLabel}>Откуда</label>
-                <AirportAutosuggest value={origin} onChange={setOrigin} placeholder="Откуда" />
+                <AirportAutosuggest
+                  value={origin}
+                  onChange={setOrigin}
+                  placeholder="Откуда"
+                />
               </div>
 
               <button
@@ -685,7 +853,12 @@ export function SearchPage() {
                 aria-label="Поменять города местами"
                 title="Поменять города местами"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <path d="M3 8h14m0 0l-4-4m4 4l-4 4" />
                   <path d="M21 16H7m0 0l4 4m-4-4l4-4" />
                 </svg>
@@ -693,15 +866,27 @@ export function SearchPage() {
 
               <div className={styles.searchField}>
                 <label className={styles.hiddenLabel}>Куда</label>
-                <AirportAutosuggest value={destination} onChange={setDestination} placeholder="Куда" />
+                <AirportAutosuggest
+                  value={destination}
+                  onChange={setDestination}
+                  placeholder="Куда"
+                />
               </div>
             </div>
 
             <div className={styles.searchField}>
               <label className={styles.hiddenLabel}>Дата вылета</label>
               <div className={styles.dateField} ref={departureCalendarRef}>
-                <button type="button" className={styles.dateButton} onClick={() => openCalendar('departure')}>
-                  <span>{departureDate ? formatDateLabel(departureDate) : 'Дата вылета'}</span>
+                <button
+                  type="button"
+                  className={styles.dateButton}
+                  onClick={() => openCalendar('departure')}
+                >
+                  <span>
+                    {departureDate
+                      ? formatDateLabel(departureDate)
+                      : 'Дата вылета'}
+                  </span>
                 </button>
                 {departureDate ? (
                   <button
@@ -719,20 +904,43 @@ export function SearchPage() {
                 ) : (
                   <span className={styles.dateActionIcon} aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 2v4M16 2v4M3 9h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="17"
+                        rx="3"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                      <path
+                        d="M8 2v4M16 2v4M3 9h18"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
                     </svg>
                   </span>
                 )}
-                {openCalendarField === 'departure' ? renderCalendar('departure') : null}
+                {openCalendarField === 'departure'
+                  ? createPortal(renderCalendar('departure'), document.body)
+                  : null}
               </div>
             </div>
 
             <div className={styles.searchField}>
               <label className={styles.hiddenLabel}>Дата возвращения</label>
               <div className={styles.dateField} ref={returnCalendarRef}>
-                <button type="button" className={styles.dateButton} onClick={() => openCalendar('return')}>
-                  <span>{returnDate ? formatDateLabel(returnDate) : 'Дата возвращения'}</span>
+                <button
+                  type="button"
+                  className={styles.dateButton}
+                  onClick={() => openCalendar('return')}
+                >
+                  <span>
+                    {returnDate
+                      ? formatDateLabel(returnDate)
+                      : 'Дата возвращения'}
+                  </span>
                 </button>
                 {returnDate ? (
                   <button
@@ -750,12 +958,27 @@ export function SearchPage() {
                 ) : (
                   <span className={styles.dateActionIcon} aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M8 2v4M16 2v4M3 9h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="17"
+                        rx="3"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                      <path
+                        d="M8 2v4M16 2v4M3 9h18"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
                     </svg>
                   </span>
                 )}
-                {openCalendarField === 'return' ? renderCalendar('return') : null}
+                {openCalendarField === 'return'
+                  ? createPortal(renderCalendar('return'), document.body)
+                  : null}
               </div>
             </div>
 
@@ -766,7 +989,10 @@ export function SearchPage() {
                 className={styles.passengerButton}
                 onClick={() => setShowPassengerPanel((value) => !value)}
               >
-                <span>{adults + kids + babies} {adults + kids + babies === 1 ? 'пассажир' : 'пассажира'}</span>
+                <span>
+                  {adults + kids + babies}{' '}
+                  {adults + kids + babies === 1 ? 'пассажир' : 'пассажира'}
+                </span>
                 <small>{cabinClass === 'Business' ? 'Бизнес' : 'Эконом'}</small>
               </button>
 
@@ -775,7 +1001,14 @@ export function SearchPage() {
                   <div className={styles.passengerRow}>
                     <span>Взрослые</span>
                     <div className={styles.passengerControl}>
-                      <button type="button" onClick={() => updatePassengerValue('adults', adults - 1)}>-</button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePassengerValue('adults', adults - 1)
+                        }
+                      >
+                        -
+                      </button>
                       <input
                         type="number"
                         min={1}
@@ -790,13 +1023,25 @@ export function SearchPage() {
                         }}
                         aria-label="Взрослые"
                       />
-                      <button type="button" onClick={() => updatePassengerValue('adults', adults + 1)}>+</button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePassengerValue('adults', adults + 1)
+                        }
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                   <div className={styles.passengerRow}>
                     <span>Дети</span>
                     <div className={styles.passengerControl}>
-                      <button type="button" onClick={() => updatePassengerValue('kids', kids - 1)}>-</button>
+                      <button
+                        type="button"
+                        onClick={() => updatePassengerValue('kids', kids - 1)}
+                      >
+                        -
+                      </button>
                       <input
                         type="number"
                         min={0}
@@ -811,13 +1056,25 @@ export function SearchPage() {
                         }}
                         aria-label="Дети"
                       />
-                      <button type="button" onClick={() => updatePassengerValue('kids', kids + 1)}>+</button>
+                      <button
+                        type="button"
+                        onClick={() => updatePassengerValue('kids', kids + 1)}
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                   <div className={styles.passengerRow}>
                     <span>Младенцы</span>
                     <div className={styles.passengerControl}>
-                      <button type="button" onClick={() => updatePassengerValue('babies', babies - 1)}>-</button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePassengerValue('babies', babies - 1)
+                        }
+                      >
+                        -
+                      </button>
                       <input
                         type="number"
                         min={0}
@@ -832,21 +1089,36 @@ export function SearchPage() {
                         }}
                         aria-label="Младенцы"
                       />
-                      <button type="button" onClick={() => updatePassengerValue('babies', babies + 1)}>+</button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePassengerValue('babies', babies + 1)
+                        }
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                   <div className={styles.passengerRow}>
                     <span>Класс</span>
-                    <select value={cabinClass} onChange={(event) => setCabinClass(event.target.value)}>
+                    <Select
+                      aria-label="Класс обслуживания"
+                      value={cabinClass}
+                      onChange={(event) => setCabinClass(event.target.value)}
+                    >
                       <option value="Economy">Эконом</option>
                       <option value="Business">Бизнес</option>
-                    </select>
+                    </Select>
                   </div>
                 </div>
               ) : null}
             </div>
 
-            <Button type="submit" className={styles.searchButton} disabled={loading}>
+            <Button
+              type="submit"
+              className={styles.searchButton}
+              disabled={loading}
+            >
               {loading ? 'Поиск...' : 'Найти рейсы'}
             </Button>
           </form>
@@ -858,8 +1130,16 @@ export function SearchPage() {
           <aside className={styles.sidebar}>
             <div className={styles.section}>
               <h3>Фильтры</h3>
-              <label>Максимальная общая цена</label>
-              <input type="number" min={0} step="0.01" value={maxTotalPrice} onChange={(event) => setMaxTotalPrice(event.target.value)} />
+              <label htmlFor="max-price">Максимальная общая цена</label>
+              <input
+                id="max-price"
+                placeholder="Цена до, ₽"
+                type="number"
+                min={0}
+                step="0.01"
+                value={maxTotalPrice}
+                onChange={(event) => setMaxTotalPrice(event.target.value)}
+              />
 
               <div className={styles.inlineGrid}>
                 <div className={styles.timeSlotWrap}>
@@ -896,42 +1176,67 @@ export function SearchPage() {
                   </div>
                 </div>
               </div>
-              <label>Сортировать по</label>
-              <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+              <label htmlFor="sort-field">Сортировать по</label>
+              <Select
+                id="sort-field"
+                aria-label="Сортировать по"
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+              >
                 {sortFields.map((field) => (
                   <option key={field.value} value={field.value}>
                     {field.label}
                   </option>
                 ))}
-              </select>
+              </Select>
 
-              <label>Направление</label>
-              <select value={sortDirection} onChange={(event) => setSortDirection(event.target.value)}>
+              <label htmlFor="sort-direction">Направление</label>
+              <Select
+                id="sort-direction"
+                aria-label="Направление сортировки"
+                value={sortDirection}
+                onChange={(event) => setSortDirection(event.target.value)}
+              >
                 <option value="Ascending">По возрастанию</option>
                 <option value="Descending">По убыванию</option>
-              </select>
-
+              </Select>
             </div>
           </aside>
 
-          <main className={styles.results}>
+          <div className={styles.results}>
+            <div className={styles.resultsHeading}>
+              <h2>
+                {results === null ? 'Начнём с маршрута' : 'Доступные рейсы'}
+              </h2>
+              <span>
+                {results === null
+                  ? null
+                  : `${results.length} вариантов на этой странице`}
+              </span>
+            </div>
             {results === null ? (
-              <div className={styles.hint}>Выберите маршрут и фильтры, затем выполните поиск рейсов.</div>
+              <div className={styles.hint}>
+                <span className={styles.emptyIcon} aria-hidden="true">
+                  ↗
+                </span>
+                <h3>Между «хочу» и «лечу» — один поиск</h3>
+                <p>
+                  Укажите города и даты выше. Здесь появятся рейсы, которые
+                  подходят вашей поездке.
+                </p>
+              </div>
             ) : results.length === 0 ? (
               <div className={styles.hint}>Рейсы не найдены</div>
-             ) : (
-                <ul className={styles.list}>
-                 {results.map((result, index) => (
-                   <li
-                     key={index}
-                     className={styles.card}
-                     onClick={() => handleFlightClick(result)}
-                     style={{ cursor: 'pointer' }}
-                   >
+            ) : (
+              <ul className={styles.list}>
+                {results.map((result, index) => (
+                  <li key={index} className={styles.card}>
                     <div className={styles.cardTop}>
                       <div>
                         <div className={styles.priceLabel}>Итого</div>
-                        <div className={styles.priceValue}>{formatPrice(result.totalPrice ?? result.TotalPrice)}</div>
+                        <div className={styles.priceValue}>
+                          {formatPrice(result.totalPrice ?? result.TotalPrice)}
+                        </div>
                       </div>
                       {getBadgeLabel(index, sortBy, sortDirection) && (
                         <div className={styles.badge}>
@@ -940,37 +1245,66 @@ export function SearchPage() {
                       )}
                     </div>
 
-                     {renderSegmentCard(result.outbound || result.Outbound, 'Туда')}
+                    <div className={styles.itinerary}>
+                      {renderSegmentCard(
+                        result.outbound || result.Outbound,
+                        'Туда',
+                      )}
 
-                     {result.return || result.Return ? <div className={styles.tripDivider} /> : null}
-                     {result.return || result.Return ? renderSegmentCard(result.return || result.Return, 'Обратно') : null}
+                      {result.return || result.Return ? (
+                        <div className={styles.tripDivider} />
+                      ) : null}
+                      {result.return || result.Return
+                        ? renderSegmentCard(
+                            result.return || result.Return,
+                            'Обратно',
+                          )
+                        : null}
 
-                     <div className={styles.airlineName}>{result.outbound?.airlineName || result.Outbound?.AirlineName}</div>
-                   </li>
-                 ))}
-               </ul>
-             )}
+                      <div className={styles.airlineName}>
+                        {result.outbound?.airlineName ||
+                          result.Outbound?.AirlineName}
+                      </div>
+                    </div>
+                    <Button
+                      className={styles.chooseFlight}
+                      onClick={() => handleFlightClick(result)}
+                    >
+                      Выбрать рейс
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            )}
 
-             {showStaleDataWarning && (
-               <div className={styles.staleDataWarning}>
-                 <p>Данные о рейсах могли устареть. Обновите страницу, чтобы увидеть актуальные цены и наличие мест.</p>
-                 <button
-                   onClick={() => window.location.reload()}
-                   className={styles.refreshButton}
-                 >
-                   Обновить страницу
-                 </button>
-               </div>
-             )}
+            {showStaleDataWarning && (
+              <div className={styles.staleDataWarning}>
+                <p>
+                  Данные о рейсах могли устареть. Обновите страницу, чтобы
+                  увидеть актуальные цены и наличие мест.
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className={styles.refreshButton}
+                >
+                  Обновить страницу
+                </button>
+              </div>
+            )}
 
             {results && results.length > 0 && hasMore ? (
               <div className={styles.loadMoreWrap}>
-                <Button type="button" variant="secondary" onClick={handleLoadMore} disabled={loadingMore || loading}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleLoadMore}
+                  disabled={loadingMore || loading}
+                >
                   {loadingMore ? 'Загрузка...' : 'Загрузить ещё рейсы'}
                 </Button>
               </div>
             ) : null}
-          </main>
+          </div>
         </div>
       </div>
     </AppShell>

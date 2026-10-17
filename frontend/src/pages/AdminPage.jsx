@@ -1,4 +1,6 @@
-﻿import { useState, useEffect } from 'react';
+import { formatMoney } from '../utils/format';
+import { Button } from '../components/ui/Button';
+import { useState, useEffect } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { apiClient } from '../api/client';
 import { useAuthStore } from '../store/authStore';
@@ -68,7 +70,7 @@ function OrdersTab() {
     if (!searchQuery) return true;
     const orderId = order.orderId || order.id || '';
     const userEmail = order.userEmail || '';
-    return orderId.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    return orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
            userEmail.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
@@ -104,7 +106,7 @@ function OrdersTab() {
                   day: 'numeric',
                 })
               : 'Неизвестно';
-            
+
             // Extract flight and passenger info from bookings
             const firstBooking = order.bookings && order.bookings.length > 0 ? order.bookings[0] : null;
             const flightInfo = firstBooking?.flight;
@@ -123,7 +125,7 @@ function OrdersTab() {
                   </div>
                   <div className={styles.orderMeta}>
                     <span className={`${styles.status} ${styles['status' + status]}`}>{status}</span>
-                    <span className={styles.totalPrice}>${totalPrice.toFixed(2)}</span>
+                    <span className={styles.totalPrice}>{formatMoney(totalPrice)}</span>
                   </div>
                 </div>
 
@@ -132,30 +134,30 @@ function OrdersTab() {
                   <div className={styles.actions}>
                     {status === 'Pending' && (
                       <>
-                        <button
+                        <Button variant="primary"
                           className={styles.confirmBtn}
                           onClick={() => updateOrderStatus(orderId, 'confirm')}
                           disabled={updatingStatus === orderId}
                         >
                           {updatingStatus === orderId ? 'Обновление...' : 'Подтвердить'}
-                        </button>
-                        <button
+                        </Button>
+                        <Button variant="danger"
                           className={styles.cancelBtn}
                           onClick={() => updateOrderStatus(orderId, 'cancel')}
                           disabled={updatingStatus === orderId}
                         >
                           {updatingStatus === orderId ? 'Обновление...' : 'Отменить'}
-                        </button>
+                        </Button>
                       </>
                     )}
                     {status === 'Confirmed' && (
-                      <button
+                      <Button variant="danger"
                         className={styles.cancelBtn}
                         onClick={() => updateOrderStatus(orderId, 'cancel')}
                         disabled={updatingStatus === orderId}
                       >
                         {updatingStatus === orderId ? 'Обновление...' : 'Отменить'}
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>

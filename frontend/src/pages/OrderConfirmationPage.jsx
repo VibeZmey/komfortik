@@ -1,4 +1,6 @@
-﻿import { useState, useEffect } from 'react';
+import { Button } from '../components/ui/Button';
+import { formatMoney } from '../utils/format';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
 import { apiClient } from '../api/client';
@@ -9,7 +11,7 @@ export function OrderConfirmationPage() {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
-  
+
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
@@ -41,15 +43,18 @@ export function OrderConfirmationPage() {
   async function handleConfirm() {
     setProcessing(true);
     setError('');
-    
+
     try {
       await apiClient.post(`/orders/${orderId}/confirm`);
       setSuccess('Заказ успешно подтверждён!');
+      setOrder((current) => ({ ...current, status: 1 }));
       setTimeout(() => {
         navigate('/profile', { state: { tab: 'orders' } });
       }, 2000);
     } catch (err) {
-      setError(`Не удалось подтвердить заказ: ${err.response?.data?.message || err.message}`);
+      setError(
+        `Не удалось подтвердить заказ: ${err.response?.data?.message || err.message}`,
+      );
     } finally {
       setProcessing(false);
     }
@@ -62,12 +67,14 @@ export function OrderConfirmationPage() {
 
     setProcessing(true);
     setError('');
-    
+
     try {
       await apiClient.post(`/orders/${orderId}/cancel`);
       navigate('/profile', { state: { tab: 'orders' } });
     } catch (err) {
-      setError(`Не удалось отменить заказ: ${err.response?.data?.message || err.message}`);
+      setError(
+        `Не удалось отменить заказ: ${err.response?.data?.message || err.message}`,
+      );
     } finally {
       setProcessing(false);
     }
@@ -75,7 +82,10 @@ export function OrderConfirmationPage() {
 
   if (loading) {
     return (
-      <AppShell title="Подтверждение заказа" subtitle="Проверьте бронирование перед подтверждением">
+      <AppShell
+        title="Подтверждение заказа"
+        subtitle="Проверьте бронирование перед подтверждением"
+      >
         <div className={styles.container}>
           <div className={styles.loading}>Загрузка данных заказа...</div>
         </div>
@@ -85,25 +95,51 @@ export function OrderConfirmationPage() {
 
   if (!order) {
     return (
-      <AppShell title="Подтверждение заказа" subtitle="Проверьте бронирование перед подтверждением">
+      <AppShell
+        title="Подтверждение заказа"
+        subtitle="Проверьте бронирование перед подтверждением"
+      >
         <div className={styles.container}>
           <div className={styles.error}>{error || 'Заказ не найден'}</div>
-          <button onClick={() => navigate('/profile')} className={styles.backBtn}>
+          <Button
+            variant="secondary"
+            onClick={() => navigate('/profile')}
+            className={styles.backBtn}
+          >
             Назад
-          </button>
+          </Button>
         </div>
       </AppShell>
     );
   }
 
+  const isPending = order.status === 0;
+  const statusText =
+    ['Ожидает подтверждения', 'Подтверждён', 'Отменён', 'Истёк'][
+      order.status
+    ] || 'Статус неизвестен';
+  const passengerCount =
+    order.bookings?.filter(
+      (booking) => booking.flight?.id === order.bookings[0]?.flight?.id,
+    ).length || 0;
+
   return (
-    <AppShell title="Подтверждение заказа" subtitle="Подтвердите или отмените бронирование">
+    <AppShell
+      title="Ваш заказ"
+      subtitle="Информация о бронировании и пассажирах"
+    >
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.confirmationBox}>
-            <div className={styles.checkmark}>✓</div>
-            <h1>Бронирование создано!</h1>
-            <p>Бронирование создано. Проверьте данные ниже и подтвердите его.</p>
+            <div className={styles.checkmark}>
+              {order.status === 2 || order.status === 3 ? '—' : '✓'}
+            </div>
+            <h2>{isPending ? 'Бронирование создано' : 'Ваше бронирование'}</h2>
+            <p>
+              {isPending
+                ? 'Проверьте данные ниже и подтвердите заказ.'
+                : 'Данные заказа и его текущий статус.'}
+            </p>
 
             <div className={styles.orderDetails}>
               <div className={styles.detailRow}>
@@ -112,26 +148,34 @@ export function OrderConfirmationPage() {
               </div>
               <div className={styles.detailRow}>
                 <span className={styles.label}>Статус:</span>
-                <span className={`${styles.value} ${styles.statusPending}`}>Ожидает подтверждения</span>
+                <span className={`${styles.value} ${styles.statusPending}`}>
+                  {statusText}
+                </span>
               </div>
               <div className={styles.detailRow}>
                 <span className={styles.label}>Итого:</span>
-                <span className={styles.value}>₽{order.totalPrice?.toFixed(2) || '0.00'}</span>
+                <span className={styles.value}>
+                  {formatMoney(order.totalPrice)}
+                </span>
               </div>
               <div className={styles.detailRow}>
                 <span className={styles.label}>Пассажиры:</span>
-                <span className={styles.value}>{order.bookings?.length || 0}</span>
+                <span className={styles.value}>{passengerCount}</span>
               </div>
             </div>
 
             {order.bookings && order.bookings.length > 0 && (
               <div className={styles.bookingsList}>
-                <h2>Пассажиры</h2>
+                <h3>Пассажиры и места</h3>
                 {order.bookings.map((booking, i) => (
                   <div key={i} className={styles.bookingCard}>
                     <div className={styles.bookingInfo}>
                       <p className={styles.passengerName}>
-                        {booking.passengerName || booking.PassengerName || `Пассажир ${i + 1}`}
+                        {booking.passengerName ||
+                          [booking.firstName, booking.lastName]
+                            .filter(Boolean)
+                            .join(' ') ||
+                          `Пассажир ${i + 1}`}
                       </p>
                       <p className={styles.seatInfo}>
                         Место: {booking.seatNumber || booking.SeatNumber}
@@ -146,25 +190,33 @@ export function OrderConfirmationPage() {
             {success && <div className={styles.successMessage}>{success}</div>}
 
             <div className={styles.actions}>
-              <button
-                className={styles.cancelBtn}
-                onClick={handleCancel}
-                disabled={processing}
-              >
-                {processing ? 'Обработка...' : 'Отменить заказ'}
-              </button>
-              <button
-                className={styles.confirmBtn}
-                onClick={handleConfirm}
-                disabled={processing}
-              >
-                {processing ? 'Подтверждение...' : 'Подтвердить заказ'}
-              </button>
+              {(order.status === 0 || order.status === 1) && (
+                <Button
+                  variant="danger"
+                  className={styles.cancelBtn}
+                  onClick={handleCancel}
+                  disabled={processing}
+                >
+                  {processing ? 'Обработка...' : 'Отменить заказ'}
+                </Button>
+              )}
+              {isPending && (
+                <Button
+                  className={styles.confirmBtn}
+                  onClick={handleConfirm}
+                  disabled={processing}
+                >
+                  {processing ? 'Подтверждение...' : 'Подтвердить заказ'}
+                </Button>
+              )}
             </div>
 
-            <p className={styles.note}>
-              Подтвердите бронирование, чтобы завершить покупку. При необходимости его можно отменить.
-            </p>
+            {isPending && (
+              <p className={styles.note}>
+                Подтвердите бронирование, чтобы завершить покупку. При
+                необходимости его можно отменить.
+              </p>
+            )}
           </div>
         </div>
       </div>

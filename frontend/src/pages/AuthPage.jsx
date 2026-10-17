@@ -6,7 +6,7 @@ import { registerUser, loginUser } from '../api/auth';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Spinner } from '../components/ui/Spinner';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import styles from './AuthPage.module.css';
 
 const initialValues = {
@@ -70,7 +70,7 @@ export function AuthPage() {
 
   const heading = useMemo(
     () => (mode === 'register' ? 'Создайте аккаунт' : 'Вход'),
-    [mode]
+    [mode],
   );
 
   function handleModeChange(nextMode) {
@@ -130,7 +130,7 @@ export function AuthPage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroBadge}>{APP_NAME}</div>
-        <h1>Путешествуйте с комфортом</h1>
+        <h1>Сначала мечта. Потом билет.</h1>
         <p>Простые поездки, удобное бронирование и спокойный путь к цели.</p>
         <div className={styles.heroList}>
           <div>
@@ -139,11 +139,13 @@ export function AuthPage() {
           </div>
           <div>
             <strong>Путешествия без лишнего</strong>
-            <span>Бронируйте, управляйте заказами и ищите рейсы в одном месте.</span>
+            <span>
+              Бронируйте, управляйте заказами и ищите рейсы в одном месте.
+            </span>
           </div>
           <div>
-            <strong>Создано для комфорта</strong>
-            <span>Уютный дизайн помогает сосредоточиться на путешествии.</span>
+            <strong>Всё под рукой</strong>
+            <span>Пассажиры, места и услуги сохраняются в вашей поездке.</span>
           </div>
         </div>
       </section>
@@ -154,14 +156,14 @@ export function AuthPage() {
             <span className={styles.cardEyebrow}>Аккаунт</span>
             <h2>{heading}</h2>
           </div>
-          <img
-            className={styles.logo}
-            src="/logo.svg?v=2"
-            alt={APP_NAME}
-          />
+          <img className={styles.logo} src="/logo.svg?v=3" alt={APP_NAME} />
         </div>
 
-        <div className={styles.tabs} role="tablist" aria-label="Вход и регистрация">
+        <div
+          className={styles.tabs}
+          role="tablist"
+          aria-label="Вход и регистрация"
+        >
           <button
             type="button"
             className={mode === 'login' ? styles.tabActive : styles.tab}
@@ -194,12 +196,18 @@ export function AuthPage() {
             label="Пароль"
             type="password"
             name="password"
-            autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+            autoComplete={
+              mode === 'register' ? 'new-password' : 'current-password'
+            }
             value={values.password}
             onChange={handleChange}
             error={errors.password}
             placeholder="Введите пароль"
-            hint={mode === 'register' ? 'Пароль должен содержать не менее 8 символов.' : ''}
+            hint={
+              mode === 'register'
+                ? 'Пароль должен содержать не менее 8 символов.'
+                : ''
+            }
           />
 
           {message ? (
@@ -218,7 +226,13 @@ export function AuthPage() {
           ) : null}
 
           <Button type="submit" fullWidth disabled={isSubmitting}>
-            {isSubmitting ? <Spinner label="Отправка" /> : mode === 'register' ? 'Отправить ссылку для подтверждения' : 'Отправить ссылку для входа'}
+            {isSubmitting ? (
+              <Spinner label="Отправка" />
+            ) : mode === 'register' ? (
+              'Отправить ссылку для подтверждения'
+            ) : (
+              'Отправить ссылку для входа'
+            )}
           </Button>
 
           <p className={styles.bottomText}>
@@ -231,26 +245,9 @@ export function AuthPage() {
         </form>
 
         <div className={styles.footerLink}>
-          <button 
-            onClick={() => navigate(ROUTES.home)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#6d28d9',
-              fontWeight: 700,
-              textDecoration: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              font: 'inherit'
-            }}
-            onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
-            onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
-          >
-            На главную
-          </button>
+          <button onClick={() => navigate(ROUTES.home)}>На главную</button>
         </div>
       </section>
     </div>
   );
 }
-

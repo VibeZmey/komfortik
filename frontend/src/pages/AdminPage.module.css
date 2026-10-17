@@ -8,7 +8,7 @@
   display: flex;
   gap: 16px;
   margin-bottom: 32px;
-  border-bottom: 2px solid #c9dced;
+  border-bottom: 2px solid var(--border);
 }
 
 .tabBtn {
@@ -17,18 +17,18 @@
   background: none;
   font-size: 1rem;
   font-weight: 500;
-  color: #60758a;
+  color: var(--muted);
   cursor: pointer;
   position: relative;
   transition: color 0.2s ease;
 }
 
 .tabBtn:hover {
-  color: #36536c;
+  color: var(--text);
 }
 
 .tabBtnActive {
-  color: #2678b8;
+  color: var(--accent);
   font-weight: 600;
 }
 
@@ -39,15 +39,15 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #2678b8;
+  background: var(--accent);
 }
 
 .content {
   background: white;
   border-radius: 16px;
-  border: 1px solid rgba(38, 120, 184, 0.18);
+  border: 1px solid var(--border);
   padding: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
 }
 
 .tab {
@@ -66,12 +66,12 @@
 .tabHeader h3 {
   margin: 0;
   font-size: 1.5rem;
-  color: #19324d;
+  color: var(--text);
 }
 
 .searchInput {
   padding: 10px 16px;
-  border: 1px solid #c9dced;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.95rem;
   width: 300px;
@@ -80,24 +80,24 @@
 
 .searchInput:focus {
   outline: none;
-  border-color: #2678b8;
-  box-shadow: 0 0 0 3px rgba(38, 120, 184, 0.1);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
 }
 
 .loading,
 .empty {
   padding: 40px;
   text-align: center;
-  color: #60758a;
+  color: var(--muted);
   font-size: 1rem;
 }
 
 .error {
   padding: 16px;
-  background-color: #e6f1fb;
+  background-color: var(--danger-soft);
   border: 1px solid #fca5a5;
   border-radius: 8px;
-  color: #b4233e;
+  color: var(--danger);
   margin-bottom: 16px;
 }
 
@@ -108,17 +108,17 @@
 }
 
 .orderCard {
-  border: 1px solid #c9dced;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
-  background: #f5f9fd;
+  background: var(--surface-muted);
   transition: all 0.2s ease;
 }
 
 .orderCard:hover {
-  border-color: #2678b8;
+  border-color: var(--accent);
   background: white;
-  box-shadow: 0 4px 12px rgba(38, 120, 184, 0.1);
+  box-shadow: var(--shadow);
 }
 
 .orderHeader {
@@ -135,18 +135,18 @@
 .orderId {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #19324d;
+  color: var(--text);
   margin-bottom: 4px;
 }
 
 .userEmail {
   font-size: 0.9rem;
-  color: #60758a;
+  color: var(--muted);
 }
 
 .flightRoute {
   font-size: 0.9rem;
-  color: #60758a;
+  color: var(--muted);
 }
 
 .orderMeta {
@@ -164,8 +164,8 @@
 }
 
 .statusPending {
-  background: #dceeff;
-  color: #174a7e;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
 }
 
 .statusConfirmed {
@@ -174,19 +174,19 @@
 }
 
 .statusExpired {
-  background: #dceeff;
-  color: #174a7e;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
 }
 
 .statusCancelled {
-  background: #e6f1fb;
+  background: var(--danger-soft);
   color: #991b1b;
 }
 
 .totalPrice {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #19324d;
+  color: var(--text);
 }
 
 .orderFooter {
@@ -194,11 +194,11 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 16px;
-  border-top: 1px solid #c9dced;
+  border-top: 1px solid var(--border);
 }
 
 .date {
-  color: #8aa0b4;
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
@@ -234,11 +234,11 @@
 .cancelBtn {
   background: rgba(239, 68, 68, 0.1);
   color: #991b1b;
-  border: 1px solid #c1dff3;
+  border: 1px solid var(--border);
 }
 
 .cancelBtn:hover:not(:disabled) {
-  background: #e6f1fb;
+  background: var(--danger-soft);
 }
 
 .confirmBtn:disabled,
@@ -256,7 +256,7 @@
 .usersTable {
   display: grid;
   grid-template-columns: 1fr;
-  border: 1px solid #c9dced;
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -268,7 +268,7 @@
   gap: 16px;
   padding: 16px;
   align-items: center;
-  border-bottom: 1px solid #c9dced;
+  border-bottom: 1px solid var(--border);
 }
 
 .usersRow:last-child {
@@ -276,9 +276,9 @@
 }
 
 .usersHeader {
-  background: #f5f9fd;
+  background: var(--surface-muted);
   font-weight: 600;
-  color: #60758a;
+  color: var(--muted);
   text-transform: uppercase;
   font-size: 0.85rem;
 }
@@ -289,12 +289,12 @@
 }
 
 .usersRow:hover {
-  background: #f5f9fd;
+  background: var(--surface-muted);
 }
 
 .colEmail {
   font-weight: 500;
-  color: #19324d;
+  color: var(--text);
 }
 
 .colCreatedAt,
@@ -318,18 +318,18 @@
 }
 
 .blocked {
-  background: #e6f1fb;
+  background: var(--danger-soft);
   color: #991b1b;
 }
 
 .blockBtn {
   background: rgba(239, 68, 68, 0.1);
   color: #991b1b;
-  border: 1px solid #c1dff3;
+  border: 1px solid var(--border);
 }
 
 .blockBtn:hover:not(:disabled) {
-  background: #e6f1fb;
+  background: var(--danger-soft);
 }
 
 .unblockBtn {
@@ -373,26 +373,26 @@
   .usersRow::before {
     content: attr(data-label);
     font-weight: 600;
-    color: #60758a;
+    color: var(--muted);
     display: block;
     margin-bottom: 4px;
     font-size: 0.85rem;
   }
 
   .colEmail::before {
-    content: 'РџРѕС‡С‚Р°: ';
+    content: 'Почта: ';
   }
 
   .colCreatedAt::before {
-    content: 'Member Since: ';
+    content: 'Дата создания: ';
   }
 
   .colStatus::before {
-    content: 'Status: ';
+    content: 'Статус: ';
   }
 
   .colActions::before {
-    content: 'Actions: ';
+    content: 'Действия: ';
   }
 
   .orderHeader {
@@ -420,3 +420,79 @@
   }
 }
 
+.container {
+  max-width: none;
+  padding: 0;
+}
+.tabsNav {
+  display: inline-flex;
+  background: white;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+.tabBtn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+.tabBtnActive {
+  background: var(--accent);
+  color: white;
+}
+.tabBtnActive::after {
+  display: none;
+}
+.content {
+  padding: var(--space);
+  border: 0;
+  border-radius: 24px;
+}
+.tabHeader h3 {
+  font-weight: 500;
+}
+.orderCard {
+  border-radius: 16px;
+  background: white;
+  padding: var(--space);
+  border-left: 4px solid var(--accent);
+}
+.usersHeader {
+  background: #29283f;
+  color: #d6d3e7;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+.usersTable {
+  border-radius: 16px;
+}
+.usersRow {
+  padding: 20px 16px;
+}
+.colEmail {
+  overflow-wrap: anywhere;
+}
+.orderMeta {
+  flex-wrap: wrap;
+}
+.orderHeader,
+.orderFooter {
+  gap: 16px;
+}
+.searchInput {
+  max-width: 360px;
+}
+.actions {
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .orderHeader,
+  .orderFooter {
+    align-items: stretch;
+  }
+  .orderMeta {
+    align-items: flex-start;
+  }
+}

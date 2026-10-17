@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../api/client';
 import { ROUTES } from '../../config';
@@ -40,39 +40,45 @@ function getNotificationIcon(type) {
 }
 
 function getNotificationTitle(notification) {
-  const { type, Payload } = notification;
-  const payload = Payload || notification.payload;
+  const type = notification.type ?? notification.Type;
+  const payload = notification.payload ?? notification.Payload;
 
+  const orderId = payload?.orderId ?? payload?.OrderId;
+  const orderLabel = orderId
+    ? `Заказ №${String(orderId).split('-')[0]}`
+    : 'Заказ';
   switch (type) {
     case 0:
     case 'OrderConfirmed':
-      return 'Заказ подтверждён';
+      return `${orderLabel} подтверждён`;
     case 1:
     case 'OrderCancelled':
-      return 'Заказ отменён';
+      return `${orderLabel} отменён`;
     case 2:
     case 'OrderCreated':
-      return 'Заказ создан';
+      return `${orderLabel} создан`;
     case 3:
     case 'OrderExpired':
-      return 'Срок заказа истёк';
+      return `${orderLabel}: срок действия истёк`;
     case 4:
     case 'CheckInOpened':
-      return payload?.FlightNumber ? `Регистрация открыта — ${payload.FlightNumber}` : 'Регистрация открыта';
+      return (payload?.flightNumber ?? payload?.FlightNumber)
+        ? `Регистрация открыта — ${payload.flightNumber ?? payload.FlightNumber}`
+        : 'Регистрация открыта';
     default:
       return 'Notification';
   }
 }
 
 function getNotificationDescription(notification) {
-  const { type, Payload } = notification;
-  const payload = Payload || notification.payload;
+  const type = notification.type ?? notification.Type;
+  const payload = notification.payload ?? notification.Payload;
 
   switch (type) {
     case 0:
     case 'OrderConfirmed':
-      return payload?.TotalPrice
-        ? `Заказ подтверждён. Сумма: ${payload.Currency || 'USD'} ${payload.TotalPrice}`
+      return (payload?.totalPrice ?? payload?.TotalPrice) != null
+        ? `Заказ подтверждён. Сумма: ${payload.currency || payload.Currency || 'RUB'} ${payload.totalPrice ?? payload.TotalPrice}`
         : 'Ваш заказ подтверждён.';
     case 1:
     case 'OrderCancelled':
@@ -85,15 +91,18 @@ function getNotificationDescription(notification) {
       return 'Срок действия заказа истёк.';
     case 4:
     case 'CheckInOpened':
-      const departureTime = payload?.DepartureTime
-        ? new Date(payload.DepartureTime).toLocaleDateString('ru-RU', {
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        : 'время неизвестно';
-      return `Регистрация на рейс ${payload?.FlightNumber || ''} открыта. Вылет: ${departureTime}`;
+      const departureTime =
+        (payload?.departureTime ?? payload?.DepartureTime)
+          ? new Date(
+              payload.departureTime ?? payload.DepartureTime,
+            ).toLocaleDateString('ru-RU', {
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : 'время неизвестно';
+      return `Регистрация на рейс ${(payload?.flightNumber ?? payload?.FlightNumber) || ''} открыта. Вылет: ${departureTime}`;
     default:
       return 'У вас новое уведомление.';
   }
@@ -122,7 +131,8 @@ export function NotificationsPanel() {
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      return () =>
+        document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isOpen]);
 
@@ -137,7 +147,7 @@ export function NotificationsPanel() {
       const response = await apiClient.get('/notifications/me');
       const notifs = Array.isArray(response.data) ? response.data : [];
       setNotifications(notifs);
-      setHasUnread(notifs.some(n => !n.isRead && !n.IsRead));
+      setHasUnread(notifs.some((n) => !n.isRead && !n.IsRead));
     } catch (err) {
       console.error('Failed to load notifications:', err);
     } finally {
@@ -157,7 +167,7 @@ export function NotificationsPanel() {
   async function handleNotificationClick(notification) {
     const notifId = notification.id || notification.Id;
     const isRead = notification.isRead || notification.IsRead;
-    const type = notification.type || notification.Type;
+    const type = notification.type ?? notification.Type;
     const payload = notification.Payload || notification.payload;
 
     if (!isRead) {
@@ -194,7 +204,12 @@ export function NotificationsPanel() {
         aria-label="Уведомления"
         title="Уведомления"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
@@ -205,7 +220,10 @@ export function NotificationsPanel() {
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
             <h3>Уведомления</h3>
-            <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setIsOpen(false)}
+            >
               ✕
             </button>
           </div>
@@ -227,59 +245,68 @@ export function NotificationsPanel() {
                   const bIsRead = b.isRead || b.IsRead;
                   if (aIsRead === bIsRead) {
                     // If same read status, sort by creation time (newest first)
-                    const aTime = new Date(a.createdAt || a.CreatedAt).getTime();
-                    const bTime = new Date(b.createdAt || b.CreatedAt).getTime();
+                    const aTime = new Date(
+                      a.createdAt || a.CreatedAt,
+                    ).getTime();
+                    const bTime = new Date(
+                      b.createdAt || b.CreatedAt,
+                    ).getTime();
                     return bTime - aTime;
                   }
                   return aIsRead ? 1 : -1;
                 })
                 .map((notification) => {
-                const notifId = notification.id || notification.Id;
-                const isRead = notification.isRead || notification.IsRead;
-                const createdAt = notification.createdAt || notification.CreatedAt;
-                const type = notification.type || notification.Type;
+                  const notifId = notification.id || notification.Id;
+                  const isRead = notification.isRead || notification.IsRead;
+                  const createdAt =
+                    notification.createdAt || notification.CreatedAt;
+                  const type = notification.type ?? notification.Type;
 
-                return (
-                  <div
-                    key={notifId}
-                    className={`${styles.notificationItem} ${isRead ? styles.notificationRead : styles.notificationUnread}`}
-                    onClick={() => handleNotificationClick(notification)}
-                  >
-                    <div className={styles.notificationIndicator}>
-                      <span className={`${styles.indicator} ${isRead ? styles.indicatorRead : styles.indicatorUnread}`}></span>
-                    </div>
-
-                    <div className={styles.notificationContent}>
-                      <div className={styles.notificationIcon}>{getNotificationIcon(type)}</div>
-                      <div className={styles.notificationText}>
-                        <h4>{getNotificationTitle(notification)}</h4>
-                        <p>{getNotificationDescription(notification)}</p>
-                        <small className={styles.timestamp}>
-                          {new Date(createdAt).toLocaleDateString('ru-RU', {
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
-                        </small>
+                  return (
+                    <div
+                      key={notifId}
+                      className={`${styles.notificationItem} ${isRead ? styles.notificationRead : styles.notificationUnread}`}
+                      onClick={() => handleNotificationClick(notification)}
+                    >
+                      <div className={styles.notificationIndicator}>
+                        <span
+                          className={`${styles.indicator} ${isRead ? styles.indicatorRead : styles.indicatorUnread}`}
+                        ></span>
                       </div>
-                    </div>
 
-                    {!isRead && (
-                      <button
-                        className={styles.markReadBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleNotificationClick(notification);
-                        }}
-                        title="Отметить как прочитанное и открыть"
-                      >
-                        →
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+                      <div className={styles.notificationContent}>
+                        <div className={styles.notificationIcon}>
+                          {getNotificationIcon(type)}
+                        </div>
+                        <div className={styles.notificationText}>
+                          <h4>{getNotificationTitle(notification)}</h4>
+                          <p>{getNotificationDescription(notification)}</p>
+                          <small className={styles.timestamp}>
+                            {new Date(createdAt).toLocaleDateString('ru-RU', {
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </small>
+                        </div>
+                      </div>
+
+                      {!isRead && (
+                        <button
+                          className={styles.markReadBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNotificationClick(notification);
+                          }}
+                          title="Отметить как прочитанное и открыть"
+                        >
+                          →
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
             </div>
           )}
         </div>
@@ -287,9 +314,3 @@ export function NotificationsPanel() {
     </div>
   );
 }
-
-
-
-
-
-

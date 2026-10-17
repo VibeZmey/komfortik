@@ -8,19 +8,19 @@
 .cardAccent {
   display: grid;
   gap: 1rem;
-  border-radius: 28px;
+  border-radius: 16px;
   padding: 1.4rem;
-  border: 1px solid rgba(38, 120, 184, 0.12);
+  border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 18px 48px rgba(24, 78, 125, 0.08);
+  box-shadow: var(--shadow);
 }
 
 .cardAccent {
-  background: #eef6fc;
+  background: var(--canvas);
 }
 
 .cardLabel {
-  color: #1d5f99;
+  color: var(--accent);
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -30,14 +30,14 @@
 .card h2,
 .cardAccent h2 {
   margin: 0;
-  color: #19324d;
+  color: var(--text);
   font-size: clamp(1.4rem, 2.2vw, 2rem);
   letter-spacing: -0.04em;
 }
 
 .cardAccent p {
   margin: 0;
-  color: #60758a;
+  color: var(--muted);
   line-height: 1.7;
 }
 
@@ -55,12 +55,12 @@
 }
 
 .list span {
-  color: #60758a;
+  color: var(--muted);
   font-size: 0.84rem;
 }
 
 .list strong {
-  color: #19324d;
+  color: var(--text);
   font-weight: 700;
 }
 
@@ -72,8 +72,8 @@
 
 .pillRow span {
   border-radius: 999px;
-  background: rgba(38, 120, 184, 0.12);
-  color: #174a7e;
+  background: var(--border);
+  color: var(--accent-dark);
   font-size: 0.9rem;
   font-weight: 700;
   padding: 0.7rem 1rem;
@@ -83,4 +83,34 @@
   .grid {
     grid-template-columns: 1fr;
   }
+}
+
+.grid {
+  gap: var(--space);
+}
+.card,
+.cardAccent {
+  padding: var(--space);
+  border-radius: 24px;
+  background: white;
+}
+.cardAccent {
+  background: #29283f;
+  color: white;
+}
+.cardAccent h2 {
+  color: white;
+}
+.cardAccent p {
+  color: #bcbace;
+}
+.cardAccent .cardLabel {
+  color: #d9f378;
+}
+.pillRow span {
+  background: #ffffff12;
+  color: #d9f378;
+  border: 1px solid #ffffff24;
+  border-radius: 12px;
+  font-size: 0.9rem;
 }
